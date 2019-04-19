@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tickets: 1
+  raffle_tickets: 1
+  beers: one
+
+two:
+  tickets: 1
+  raffle_tickets: 1
+  beers: two
