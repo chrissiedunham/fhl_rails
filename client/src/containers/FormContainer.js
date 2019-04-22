@@ -23,13 +23,34 @@ class FormContainer extends Component {
     this.handleInput = this.handleInput.bind(this);
     this.handleBeerChange = this.handleBeerChange.bind(this);
     this.updateFriendAttribute = this.updateFriendAttribute.bind(this);
+    this.getOrders = this.getOrders.bind(this);
   }
 
   /* This life cycle hook gets executed when the component mounts */
 
+  fetch (endpoint) {
+    return window.fetch(endpoint)
+      .then(response => response.json())
+      .catch(error => console.log(error))
+  }
+
+  getOrders () {
+    this.fetch('/api/orders')
+      .then(orders => {
+        if (orders.length) {
+          console.log("Success fetching orders");
+          console.log(orders)
+        } else {
+          console.log("error fetching orders")
+        }
+      })
+  }
+
 	handleFormSubmit(e) {
 		e.preventDefault();
 		let userData = this.state.order;
+
+    this.getOrders();
 		console.log("Successful" + userData);
 	}
 
