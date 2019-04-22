@@ -47,6 +47,6 @@ class OrdersController < ApiController
 
     # Only allow a trusted parameter "white list" through.
     def order_params
-      params.require(:order).permit(:tickets, :raffle_tickets, :beers_id)
+      params.require(:order).permit(:tickets, :raffle_tickets, :email, :beers_id)
     end
 end

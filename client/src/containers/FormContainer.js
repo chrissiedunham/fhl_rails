@@ -24,14 +24,25 @@ class FormContainer extends Component {
     this.handleBeerChange = this.handleBeerChange.bind(this);
     this.updateFriendAttribute = this.updateFriendAttribute.bind(this);
     this.getOrders = this.getOrders.bind(this);
+    this.postOrder = this.postOrder.bind(this);
   }
 
   /* This life cycle hook gets executed when the component mounts */
 
-  fetch (endpoint) {
-    return window.fetch(endpoint)
-      .then(response => response.json())
-      .catch(error => console.log(error))
+  postOrder () {
+    fetch('/api/orders', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        order: {
+          tickets: 2, raffle_tickets: 2, email: "test_new_email@gmail.com"
+        }
+      })
+    }
+    )
   }
 
   getOrders () {
@@ -50,8 +61,8 @@ class FormContainer extends Component {
 		e.preventDefault();
 		let userData = this.state.order;
 
-    this.getOrders();
-		console.log("Successful" + userData);
+    this.postOrder();
+		console.log("Successfully posted order!");
 	}
 
   updateFriendAttribute(e) {
