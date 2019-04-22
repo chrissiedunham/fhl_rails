@@ -1,3 +1,3 @@
 class Order < ApplicationRecord
-  belongs_to :beers
+  has_many :beers
 end

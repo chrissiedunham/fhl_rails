@@ -1,16 +1,17 @@
-class OrdersController < ApplicationController
+class OrdersController < ApiController
   before_action :set_order, only: [:show, :update, :destroy]
 
   # GET /orders
   def index
-    @orders = Order.all
+    @orders = Order.select("id, email").all
 
-    render json: @orders
+    render json: @orders.to_json
   end
 
   # GET /orders/1
   def show
-    render json: @order
+    @order = Order.find(params[:id])
+    render json: @order.to_json(:include => { :beers => { :only => [:id, :name]}})
   end
 
   # POST /orders
