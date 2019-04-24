@@ -48,7 +48,7 @@ class FormContainer extends Component {
           tickets: this.state.order.tickets,
           raffle_tickets: this.state.order.raffle_tickets,
           email: "test_new_email@gmail.com",
-          payment_info: this.state.paymentMethodPayload,
+          payment_method_payload: this.state.paymentMethodPayload,
         }
       })
     }
@@ -125,7 +125,24 @@ class FormContainer extends Component {
   initPaymentForm () {
     braintree.create({
       authorization: 'sandbox_s9f68g98_hytcxkmr57rcqr2b',
-      container: '#dropin-container'
+      container: '#dropin-container',
+      locale: "en_US",
+      paymentOptionPriority: ["paypal", "card", "paypalCredit", "applePay"],
+      card: {
+        cardholderName: {
+          required: true,
+        },
+      },
+      applePay: {
+        displayName: "Super gr8 Shop",
+        paymentRequest: {
+          label: "Localized Name",
+          total: this.state.transactionAmount,
+        },
+      },
+      dataCollector: {
+        kount: true,
+      },
     }).then(dropinInstance => {
       console.log("drop in instance:" );
       console.log(dropinInstance );
@@ -153,8 +170,8 @@ class FormContainer extends Component {
 
   render() {
     return (
+      <div className="dropin-wrapper">
       <form className="container-fluid" >
-
         <Select type={'number'}
           title= {'Tickets'}
           name= {'tickets'}
@@ -192,6 +209,7 @@ class FormContainer extends Component {
           title={"Submit"}
         />{ " " }
       </form>
+    </div>
     );
   }
 }

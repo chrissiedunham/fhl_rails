@@ -39,6 +39,16 @@ class OrdersController < ApiController
     @order.destroy
   end
 
+  def gateway
+    env = ENV["BT_ENVIRONMENT"]
+    @gateway ||= Braintree::Gateway.new(
+      :environment => env && env.to_sym,
+      :merchant_id => ENV["BT_MERCHANT_ID"],
+      :public_key => ENV["BT_PUBLIC_KEY"],
+      :private_key => ENV["BT_PRIVATE_KEY"],
+    )
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order
@@ -47,6 +57,6 @@ class OrdersController < ApiController
 
     # Only allow a trusted parameter "white list" through.
     def order_params
-      params.require(:order).permit(:tickets, :raffle_tickets, :email, :beers_id)
+      params.require(:order).permit(:tickets, :raffle_tickets, :email, :beers_id, :payment_method_payload => [:nonce])
     end
 end
