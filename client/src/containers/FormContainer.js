@@ -48,7 +48,7 @@ class FormContainer extends Component {
           tickets: this.state.order.tickets,
           raffle_tickets: this.state.order.raffle_tickets,
           email: "test_new_email@gmail.com",
-          payment_method_payload: this.state.paymentMethodPayload,
+          payment_method_nonce: this.state.paymentMethodPayload["nonce"],
         }
       })
     }

@@ -16,12 +16,26 @@ class OrdersController < ApiController
 
   # POST /orders
   def create
-    @order = Order.new(order_params)
+    # @order = Order.new(order_params)
+    #
+    # if @order.save
+    #   render json: @order, status: :created, location: @order
+    # else
+    #   render json: @order.errors, status: :unprocessable_entity
+    # end
+    nonce = order_params["payment_method_nonce"]
 
-    if @order.save
-      render json: @order, status: :created, location: @order
+    result = gateway.transaction.sale(
+      amount: 10,
+      payment_method_nonce: nonce,
+      :options => {
+        :submit_for_settlement => true
+      }
+    )
+
+    if result.success? || result.transaction
     else
-      render json: @order.errors, status: :unprocessable_entity
+      error_messages = result.errors.map { |error| "Error: #{error.code}: #{error.message}" }
     end
   end
 
@@ -57,6 +71,6 @@ class OrdersController < ApiController
 
     # Only allow a trusted parameter "white list" through.
     def order_params
-      params.require(:order).permit(:tickets, :raffle_tickets, :email, :beers_id, :payment_method_payload => [:nonce])
+      params.require(:order).permit(:tickets, :raffle_tickets, :email, :beers_id, :payment_method_nonce)
     end
 end
