@@ -4,10 +4,9 @@ import FormContainer from './containers/FormContainer';
 class App extends Component {
   render() {
     return (
-      <div className="col-md-6">
-        <h3>React Form</h3>
-        <FormContainer />
-      </div>
+			<div className="col-md-6">
+				<FormContainer />
+			</div>
     );
   }
 }
