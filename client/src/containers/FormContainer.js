@@ -37,20 +37,21 @@ class FormContainer extends Component {
   }
 
   postOrder() {
+    var orderPayload = {
+      tickets: this.state.order.tickets,
+      raffle_tickets: this.state.order.raffle_tickets,
+      email: "test_new_email@gmail.com",
+      beers: this.state.friends,
+      payment_method_nonce: this.state.paymentMethodPayload["nonce"],
+    };
+    console.log(orderPayload);
     fetch('/api/orders', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        order: {
-          tickets: this.state.order.tickets,
-          raffle_tickets: this.state.order.raffle_tickets,
-          email: "test_new_email@gmail.com",
-          payment_method_nonce: this.state.paymentMethodPayload["nonce"],
-        }
-      })
+      body: JSON.stringify({ order: orderPayload })
     }
     )
   }
@@ -144,10 +145,7 @@ class FormContainer extends Component {
         kount: true,
       },
     }).then(dropinInstance => {
-      console.log("drop in instance:" );
-      console.log(dropinInstance );
       this.setState({ dropinInstance });
-      console.log(this.state);
     }).catch(err => console.error(err));
   }
 

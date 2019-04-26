@@ -17,34 +17,37 @@ class OrdersController < ApiController
 
   # POST /orders
   def create
-    nonce = all_params.delete("payment_method_nonce")
+    @order = Order.new(_order_params)
+    if @order.save!
+      @order.beers.create(_beer_params[:beers])
 
-    result = gateway.transaction.sale(
-      amount: 10,
-      payment_method_nonce: nonce,
-      :custom_fields => {
-        :tickets => params[:order][:tickets],
-        :raffle_tickets => params[:order][:raffle_tickets],
-      },
-      :options => {
-        :submit_for_settlement => true
-      },
-    )
+      result = gateway.transaction.sale(
+        amount: 10,
+        payment_method_nonce: _nonce,
+        :custom_fields => {
+          :tickets => params[:order][:tickets],
+          :raffle_tickets => params[:order][:raffle_tickets],
+        },
+        :options => {
+          :submit_for_settlement => true
+        },
+      )
 
-    Rails.logger.info(result)
+      Rails.logger.info(result)
 
-    if result.success? || result.transaction
-      @order = Order.new(order_params).save!
-      Rails.logger.info(@order)
-      render json: @order
-    else
-      error_messages = result.errors.map { |error| "Error: #{error.code}: #{error.message}" }
+      if result.success? || result.transaction
+        @order = Order.new(order_params).save!
+        Rails.logger.info(@order)
+        render json: @order
+      else
+        error_messages = result.errors.map { |error| "Error: #{error.code}: #{error.message}" }
+      end
     end
   end
 
   # PATCH/PUT /orders/1
   def update
-    if @order.update(order_params)
+    if @order.update(_order_params)
       render json: @order
     else
       render json: @order.errors, status: :unprocessable_entity
@@ -73,11 +76,15 @@ class OrdersController < ApiController
     end
 
     # Only allow a trusted parameter "white list" through.
-    def all_params
-      params.require(:order).permit(:tickets, :raffle_tickets, :email, :payment_method_nonce)
+    def _nonce
+      params.require(:order).permit(:payment_method_nonce)
     end
 
-    def order_params
+    def _order_params
       params.require(:order).permit(:tickets, :raffle_tickets, :email)
+    end
+
+    def _beer_params
+      params.require(:order).permit(beers: [:email, :name])
     end
 end
