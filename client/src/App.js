@@ -26,27 +26,12 @@ class App extends Component {
     this.handleInput = this.handleInput.bind(this);
     this.handleBraintreeFormSubmit = this.handleBraintreeFormSubmit.bind(this);
     this.updateFriendAttribute = this.updateFriendAttribute.bind(this);
-    this.initBraintreePaymentForm = this.initBraintreePaymentForm.bind(this);
     this.postOrder = this.postOrder.bind(this);
-    this.doRequestPaymentMethod = this.doRequestPaymentMethod.bind(this);
+    this.setDropinState = this.setDropinState.bind(this);
+    this.getDropinState = this.getDropinState.bind(this);
+    this.setPaymentMethodPayload = this.setPaymentMethodPayload.bind(this);
   }
 
-  doRequestPaymentMethod (e) {
-    e.preventDefault();
-
-    console.log("requesting...");
-    this.state.dropinInstance
-      .requestPaymentMethod()
-      .then(paymentMethodPayload => {
-        console.log(paymentMethodPayload);
-        this.setState({ paymentMethodPayload });
-        this.postOrder();
-        console.log("Successfully posted order!");
-      })
-      .catch(paymentMethodError => {
-        console.error(paymentMethodError);
-      });
-  }
 
   handleBeerChange(e) {
     e.persist();
@@ -98,30 +83,16 @@ class App extends Component {
     )
   }
 
-  initBraintreePaymentForm () {
-    braintree.create({
-      authorization: 'sandbox_s9f68g98_hytcxkmr57rcqr2b',
-      container: '#dropin-container',
-      locale: "en_US",
-      paymentOptionPriority: ["paypal", "card", "paypalCredit", "applePay"],
-      card: {
-        cardholderName: {
-          required: true,
-        },
-      },
-      applePay: {
-        displayName: "Super gr8 Shop",
-        paymentRequest: {
-          label: "Localized Name",
-          total: this.state.transactionAmount,
-        },
-      },
-      dataCollector: {
-        kount: true,
-      },
-    }).then(dropinInstance => {
-      this.setState({ dropinInstance });
-    }).catch(err => console.error(err));
+  setDropinState (dropinInstance) {
+    this.setState({ dropinInstance });
+  }
+
+  getDropinState () {
+    return this.state.dropinInstance;
+  }
+
+  setPaymentMethodPayload (paymentMethodPayload) {
+    this.setState({ paymentMethodPayload });
   }
 
   handleBraintreeFormSubmit(e) {
@@ -158,7 +129,7 @@ class App extends Component {
       },
       body: JSON.stringify({ order: orderPayload })
     }).then(response => { return response.json();})
-      .then(responseData => {alert(responseData); return responseData;})
+      .then(responseData => { return responseData;})
       .then(data => {
         alert(JSON.stringify(data));
       })
@@ -179,7 +150,13 @@ class App extends Component {
           handleInput={this.handleInput}
           handleFormSubmit={this.postOrder}
           updateFriendAttribute={this.updateFriendAttribute}
-          paymentForm= {<BraintreeForm initPaymentForm={this.initBraintreePaymentForm} />}
+          paymentForm= {
+            <BraintreeForm
+              setDropinState={this.setDropinState}
+              setPaymentMethodPayload={this.setPaymentMethodPayload}
+              getDropinState={this.getDropinState}
+            />
+          }
         />
 			</div>
     );
