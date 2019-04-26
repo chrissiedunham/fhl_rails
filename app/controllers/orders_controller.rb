@@ -40,7 +40,12 @@ class OrdersController < ApiController
         )
 
         Rails.logger.info(result)
+
+        render json: @order
       end
+      render json: @order
+    else
+      render json: @order.errors, status: :unprocessable_entity
     end
   end
 

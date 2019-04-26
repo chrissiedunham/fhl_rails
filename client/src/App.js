@@ -19,6 +19,7 @@ class App extends Component {
       },
       dropinInstance: {},
       paymentMethodPayload: {},
+      paymentResponse: '',
     }
 
     this.handleBeerChange = this.handleBeerChange.bind(this);
@@ -156,8 +157,14 @@ class App extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ order: orderPayload })
-    }
-    )
+    }).then(response => { return response.json();})
+      .then(responseData => {alert(responseData); return responseData;})
+      .then(data => {
+        alert(JSON.stringify(data));
+      })
+      .catch(err => {
+        alert("fetch error" + err);
+      });
   }
 
   render() {
