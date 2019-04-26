@@ -18,7 +18,11 @@ class FormContainer extends Component {
         beers: '',
       },
       friends: [],
-      ticketOptions: ["1 Ticket ($25)", "2 Tickets ($40)", "3 Tickets ($60)", "4 Tickets ($80)"],
+      ticketOptions: [
+        { value: "1", label: "1 Ticket ($25)"},
+        { value: "2", label: "2 Tickets ($40)"},
+        { value: "3", label: "3 Tickets ($60)"},
+      ],
       dropinInstance: {},
       paymentMethodPayload: {},
     }
