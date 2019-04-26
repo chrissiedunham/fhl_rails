@@ -11,29 +11,32 @@ class OrdersController < ApiController
   # GET /orders/1
   def show
     @order = Order.find(params[:id])
+    @order.beers
     render json: @order.to_json(:include => { :beers => { :only => [:id, :name]}})
   end
 
   # POST /orders
   def create
-    # @order = Order.new(order_params)
-    #
-    # if @order.save
-    #   render json: @order, status: :created, location: @order
-    # else
-    #   render json: @order.errors, status: :unprocessable_entity
-    # end
-    nonce = order_params["payment_method_nonce"]
+    nonce = all_params.delete("payment_method_nonce")
 
     result = gateway.transaction.sale(
       amount: 10,
       payment_method_nonce: nonce,
+      :custom_fields => {
+        :tickets => params[:order][:tickets],
+        :raffle_tickets => params[:order][:raffle_tickets],
+      },
       :options => {
         :submit_for_settlement => true
-      }
+      },
     )
 
+    Rails.logger.info(result)
+
     if result.success? || result.transaction
+      @order = Order.new(order_params).save!
+      Rails.logger.info(@order)
+      render json: @order
     else
       error_messages = result.errors.map { |error| "Error: #{error.code}: #{error.message}" }
     end
@@ -70,7 +73,11 @@ class OrdersController < ApiController
     end
 
     # Only allow a trusted parameter "white list" through.
+    def all_params
+      params.require(:order).permit(:tickets, :raffle_tickets, :email, :payment_method_nonce)
+    end
+
     def order_params
-      params.require(:order).permit(:tickets, :raffle_tickets, :email, :beers_id, :payment_method_nonce)
+      params.require(:order).permit(:tickets, :raffle_tickets, :email)
     end
 end
