@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FormContainer from './containers/FormContainer';
+import PayButton from './components/PayButton';
 import BraintreeForm from './containers/BraintreeForm';
-import braintree from 'braintree-web-drop-in';
 
 class App extends Component {
   constructor(props) {
@@ -24,14 +24,12 @@ class App extends Component {
 
     this.handleBeerChange = this.handleBeerChange.bind(this);
     this.handleInput = this.handleInput.bind(this);
-    this.handleBraintreeFormSubmit = this.handleBraintreeFormSubmit.bind(this);
     this.updateFriendAttribute = this.updateFriendAttribute.bind(this);
     this.postOrder = this.postOrder.bind(this);
     this.setDropinState = this.setDropinState.bind(this);
     this.getDropinState = this.getDropinState.bind(this);
     this.setPaymentMethodPayload = this.setPaymentMethodPayload.bind(this);
   }
-
 
   handleBeerChange(e) {
     e.persist();
@@ -95,23 +93,6 @@ class App extends Component {
     this.setState({ paymentMethodPayload });
   }
 
-  handleBraintreeFormSubmit(e) {
-    e.preventDefault();
-
-    console.log("requesting...");
-    this.state.dropinInstance
-      .requestPaymentMethod()
-      .then(paymentMethodPayload => {
-        console.log(paymentMethodPayload);
-        this.setState({ paymentMethodPayload });
-        this.postOrder();
-        console.log("Successfully posted order!");
-      })
-      .catch(paymentMethodError => {
-        console.error(paymentMethodError);
-      });
-  }
-
   postOrder() {
     var orderPayload = {
       tickets: this.state.order.tickets,
@@ -148,9 +129,12 @@ class App extends Component {
 
           handleBeerChange={this.handleBeerChange}
           handleInput={this.handleInput}
-          handleFormSubmit={this.postOrder}
           updateFriendAttribute={this.updateFriendAttribute}
-          paymentForm= {
+        />
+        <PayButton
+          paymentMethodPayload={this.state.paymentMethodPayload}
+          handleFormSubmit={this.postOrder}
+          paymentMethodForm={
             <BraintreeForm
               setDropinState={this.setDropinState}
               setPaymentMethodPayload={this.setPaymentMethodPayload}

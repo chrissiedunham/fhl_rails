@@ -4,7 +4,6 @@ import React, {Component} from 'react';
 import Input from '../components/Input';
 import Select from '../components/Select';
 import AllFriendInfo from '../components/AllFriendInfo';
-import Button from '../components/Button';
 
 class FormContainer extends Component {
   constructor(props) {
@@ -51,23 +50,10 @@ class FormContainer extends Component {
             friends = {this.props.friends}
             updateFriendAttribute = {this.props.updateFriendAttribute}
           />
-          { this.props.paymentForm }
-          <Button
-            action={this.props.handleFormSubmit}
-            style={buttonStyle}
-
-            id={"submit-button"}
-            type={"primary"}
-            title={"Submit"}
-          />{ " " }
         </form>
       </div>
     );
   }
 }
-
-const buttonStyle = {
-  margin: "10px 10px 10px 10px"
-};
 
 export default FormContainer;
