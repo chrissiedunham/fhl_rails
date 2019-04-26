@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import FormContainer from './containers/FormContainer';
 import PayButton from './components/PayButton';
-import BraintreeForm from './containers/BraintreeForm';
+import BraintreeGetPaymentMethodForm from './containers/BraintreeGetPaymentMethodForm';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      testObj: {
-        testVal: 'test value',
-      },
       friends: [],
       order: {
         tickets: '',
@@ -19,7 +16,7 @@ class App extends Component {
       },
       dropinInstance: {},
       paymentMethodPayload: {},
-      paymentResponse: '',
+      orderResponse: '',
     }
 
     this.handleBeerChange = this.handleBeerChange.bind(this);
@@ -111,8 +108,9 @@ class App extends Component {
       body: JSON.stringify({ order: orderPayload })
     }).then(response => { return response.json();})
       .then(responseData => { return responseData;})
-      .then(data => {
-        alert(JSON.stringify(data));
+      .then(orderResponse => {
+        alert(JSON.stringify(orderResponse));
+        this.setState({ orderResponse });
       })
       .catch(err => {
         alert("fetch error" + err);
@@ -120,10 +118,27 @@ class App extends Component {
   }
 
   render() {
+    var payButtonOrThankYou;
+    if (this.state.orderResponse) {
+      payButtonOrThankYou = <p>Thanks for your order!</p>;
+    } else {
+      payButtonOrThankYou = <PayButton
+          paymentMethodPayload={this.state.paymentMethodPayload}
+          handleFormSubmit={this.postOrder}
+          paymentMethodForm={
+            <BraintreeGetPaymentMethodForm
+              setDropinState={this.setDropinState}
+              setPaymentMethodPayload={this.setPaymentMethodPayload}
+              getDropinState={this.getDropinState}
+            />
+          }
+        />
+    }
+
     return (
 			<div className="col-md-6">
+        <h1>Faith, Hops, Love</h1>
         <FormContainer
-          testObj={this.state.testObj}
           friends={this.state.friends}
           order={this.state.order}
 
@@ -131,17 +146,7 @@ class App extends Component {
           handleInput={this.handleInput}
           updateFriendAttribute={this.updateFriendAttribute}
         />
-        <PayButton
-          paymentMethodPayload={this.state.paymentMethodPayload}
-          handleFormSubmit={this.postOrder}
-          paymentMethodForm={
-            <BraintreeForm
-              setDropinState={this.setDropinState}
-              setPaymentMethodPayload={this.setPaymentMethodPayload}
-              getDropinState={this.getDropinState}
-            />
-          }
-        />
+        { payButtonOrThankYou }
 			</div>
     );
   }

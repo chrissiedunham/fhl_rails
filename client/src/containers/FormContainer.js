@@ -21,7 +21,6 @@ class FormContainer extends Component {
   render() {
     return (
       <div className="dropin-wrapper">
-        <h3> { this.props.testObj.testVal } </h3>
         <form className="container-fluid" >
           <Select type={'number'}
             title= {'Tickets'}

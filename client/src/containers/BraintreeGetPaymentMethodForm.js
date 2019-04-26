@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import braintree from 'braintree-web-drop-in';
 import Button from '../components/Button';
 
-class BraintreeContainer extends Component {
+class BraintreeGetPaymentMethodForm extends Component {
   constructor(props) {
     super(props);
 
@@ -73,4 +73,4 @@ class BraintreeContainer extends Component {
   }
 }
 
-export default BraintreeContainer;
+export default BraintreeGetPaymentMethodForm;
