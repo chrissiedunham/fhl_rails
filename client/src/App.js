@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FormContainer from './containers/FormContainer';
+import BraintreeForm from './containers/BraintreeForm';
 import braintree from 'braintree-web-drop-in';
 
 class App extends Component {
@@ -19,11 +20,12 @@ class App extends Component {
       dropinInstance: {},
       paymentMethodPayload: {},
     }
+
     this.handleBeerChange = this.handleBeerChange.bind(this);
     this.handleInput = this.handleInput.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleBraintreeFormSubmit = this.handleBraintreeFormSubmit.bind(this);
     this.updateFriendAttribute = this.updateFriendAttribute.bind(this);
-    this.initPaymentForm = this.initPaymentForm.bind(this);
+    this.initBraintreePaymentForm = this.initBraintreePaymentForm.bind(this);
     this.postOrder = this.postOrder.bind(this);
     this.doRequestPaymentMethod = this.doRequestPaymentMethod.bind(this);
   }
@@ -95,7 +97,7 @@ class App extends Component {
     )
   }
 
-  initPaymentForm () {
+  initBraintreePaymentForm () {
     braintree.create({
       authorization: 'sandbox_s9f68g98_hytcxkmr57rcqr2b',
       container: '#dropin-container',
@@ -121,7 +123,7 @@ class App extends Component {
     }).catch(err => console.error(err));
   }
 
-  handleFormSubmit(e) {
+  handleBraintreeFormSubmit(e) {
     e.preventDefault();
 
     console.log("requesting...");
@@ -168,9 +170,9 @@ class App extends Component {
 
           handleBeerChange={this.handleBeerChange}
           handleInput={this.handleInput}
-          handleFormSubmit={this.handleFormSubmit}
+          handleFormSubmit={this.postOrder}
           updateFriendAttribute={this.updateFriendAttribute}
-          initPaymentForm={this.initPaymentForm}
+          paymentForm= {<BraintreeForm initPaymentForm={this.initBraintreePaymentForm} />}
         />
 			</div>
     );

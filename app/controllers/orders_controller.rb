@@ -21,26 +21,25 @@ class OrdersController < ApiController
     if @order.save!
       @order.beers.create(_beer_params[:beers])
 
-      result = gateway.transaction.sale(
-        amount: 10,
-        payment_method_nonce: _nonce,
-        :custom_fields => {
-          :tickets => params[:order][:tickets],
-          :raffle_tickets => params[:order][:raffle_tickets],
-        },
-        :options => {
-          :submit_for_settlement => true
-        },
-      )
+      Rails.logger.info("*"*100)
+      Rails.logger.info(@order.beers.length)
+      Rails.logger.info(@order.to_json)
+      Rails.logger.info("*"*100)
 
-      Rails.logger.info(result)
+      if _nonce.present?
+        result = gateway.transaction.sale(
+          amount: 10,
+          payment_method_nonce: _nonce,
+          :custom_fields => {
+            :tickets => params[:order][:tickets],
+            :raffle_tickets => params[:order][:raffle_tickets],
+          },
+          :options => {
+            :submit_for_settlement => true
+          },
+        )
 
-      if result.success? || result.transaction
-        @order = Order.new(order_params).save!
-        Rails.logger.info(@order)
-        render json: @order
-      else
-        error_messages = result.errors.map { |error| "Error: #{error.code}: #{error.message}" }
+        Rails.logger.info(result)
       end
     end
   end

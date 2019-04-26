@@ -5,7 +5,6 @@ import Input from '../components/Input';
 import Select from '../components/Select';
 import AllFriendInfo from '../components/AllFriendInfo';
 import Button from '../components/Button';
-import BraintreeContainer from './BraintreeContainer';
 
 class FormContainer extends Component {
   constructor(props) {
@@ -17,48 +16,7 @@ class FormContainer extends Component {
         { value: "2", label: "2 Tickets ($40)"},
         { value: "3", label: "3 Tickets ($60)"},
       ],
-      paymentMethodPayload: {},
     }
-    this.postOrder = this.postOrder.bind(this);
-    this.doRequestPaymentMethod = this.doRequestPaymentMethod.bind(this);
-  }
-
-
-  postOrder() {
-    var orderPayload = {
-      tickets: this.props.order.tickets,
-      raffle_tickets: this.props.order.raffle_tickets,
-      email: "test_new_email@gmail.com",
-      beers: this.props.friends,
-      payment_method_nonce: this.state.paymentMethodPayload["nonce"],
-    };
-    console.log(orderPayload);
-    fetch('/api/orders', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ order: orderPayload })
-    }
-    )
-  }
-
-  doRequestPaymentMethod (e) {
-    e.preventDefault();
-
-    console.log("requesting...");
-    this.state.dropinInstance
-      .requestPaymentMethod()
-      .then(paymentMethodPayload => {
-        console.log(paymentMethodPayload);
-        this.setState({ paymentMethodPayload });
-        this.postOrder();
-        console.log("Successfully posted order!");
-      })
-      .catch(paymentMethodError => {
-        console.error(paymentMethodError);
-      });
   }
 
   render() {
@@ -93,9 +51,7 @@ class FormContainer extends Component {
             friends = {this.props.friends}
             updateFriendAttribute = {this.props.updateFriendAttribute}
           />
-          <BraintreeContainer
-            initPaymentForm={this.props.initPaymentForm}
-          />
+          { this.props.paymentForm }
           <Button
             action={this.props.handleFormSubmit}
             style={buttonStyle}
