@@ -3,7 +3,7 @@ class OrdersController < ApiController
 
   # GET /orders
   def index
-    @orders = Order.select("id, email").all
+    @orders = Order.all
 
     render json: @orders.to_json
   end
