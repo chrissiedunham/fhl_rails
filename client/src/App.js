@@ -26,22 +26,24 @@ class App extends Component {
     this.setDropinState = this.setDropinState.bind(this);
     this.getDropinState = this.getDropinState.bind(this);
     this.setPaymentMethodPayload = this.setPaymentMethodPayload.bind(this);
+    this.updatePreviousState = this.updatePreviousState.bind(this);
   }
 
   handleBeerChange(e) {
     e.persist();
     this.handleInput(e);
-    this.setState( prevState => {
-      var numFriends = e.target.value;
-      var newFriends = [];
-      for (var i=0; i < numFriends; i++) {
-        newFriends.push({ "name": '', "email": ''});
-      }
-      return {
-        friends: newFriends
-      }
-    }, () => console.log("order: " + this.state.order, "friends: " + this.state.friends)
-    )
+    this.setState(this.updatePreviousState(e), () => console.log(this.state));
+  }
+
+  updatePreviousState(e) {
+    var numFriends = e.target.value;
+    var newFriends = [];
+    for (var i=0; i < numFriends; i++) {
+      newFriends.push({ "name": '', "email": ''});
+    }
+    return {
+      friends: newFriends
+    }
   }
 
   handleInput(e) {
@@ -120,7 +122,7 @@ class App extends Component {
   render() {
     var payButtonOrThankYou;
     if (this.state.orderResponse) {
-      payButtonOrThankYou = <p>Thanks for your order!</p>;
+      payButtonOrThankYou = <h2>Thanks for your order!</h2>;
     } else {
       payButtonOrThankYou = <PayButton
           paymentMethodPayload={this.state.paymentMethodPayload}
