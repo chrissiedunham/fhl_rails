@@ -2,7 +2,7 @@
   "name": "fhl_rails",
   "license": "MIT",
   "engines": {
-    "node": "8.9.4",
+    "node": "8.10",
     "yarn": "1.6.0"
   },
   "scripts": {
