@@ -19,8 +19,6 @@ class App extends Component {
       orderResponse: '',
     }
 
-    this.handleInput = this.handleInput.bind(this);
-    this.updateFriendAttribute = this.updateFriendAttribute.bind(this);
     this.postOrder = this.postOrder.bind(this);
     this.setDropinState = this.setDropinState.bind(this);
     this.getDropinState = this.getDropinState.bind(this);
@@ -33,40 +31,6 @@ class App extends Component {
     this.setState(prevState => {
       return updateFunction(prevState);
     }, () => console.log(this.state));
-  }
-
-  handleInput(e) {
-    let value = e.target.value;
-    let name = e.target.name;
-    this.setState( prevState => {
-      return {
-        order : {
-          ...prevState.order, [name]: value
-        }
-      }
-    }, () => console.log(this.props.order)
-    )
-  }
-
-  updateFriendAttribute(e) {
-    let value = e.target.value;
-    let name = e.target.name;
-    let friend_index = parseInt(name.match(/\d+/g));
-    let friend_attribute = name.match(/[a-z]+/g)[1];
-
-    this.setState(prevState => {
-      return {
-        friends: prevState.friends.map((friend,i) => {
-          if (i === friend_index) {
-            friend[friend_attribute] = value;
-            return friend;
-          }
-          return friend;
-        }
-        )
-      }
-    }, () => console.log(this.props.friends)
-    )
   }
 
   setDropinState (dropinInstance) {
@@ -139,8 +103,6 @@ class App extends Component {
           getOrderData={this.getOrderData}
 
           updateState={this.updateState}
-          handleInput={this.handleInput}
-          updateFriendAttribute={this.updateFriendAttribute}
         />
         { payButtonOrThankYou }
 			</div>

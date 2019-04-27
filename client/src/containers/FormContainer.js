@@ -16,6 +16,7 @@ class FormContainer extends Component {
         { value: "3", label: "3 Tickets ($60)"},
       ],
     }
+
     this.handleInput = this.handleInput.bind(this);
     this.updateFriends = this.updateFriends.bind(this);
     this.updateFriendAttribute = this.updateFriendAttribute.bind(this);
