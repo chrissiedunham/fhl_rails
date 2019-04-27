@@ -8,10 +8,14 @@ class PayPalButton extends Component {
 
   render() {
     return <input
+      id={"pay_button"}
       type={'image'}
       src={"http://www.paypal.com/en_US/i/btn/x-click-but01.gif" }
 		  onChange={this.props.action}
 			onClick={this.props.action}
+      name={"submit"}
+      alt={"Make payments with PayPal - it's fast, free and secure!"}
+
     />
   }
 }
