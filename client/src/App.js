@@ -19,31 +19,20 @@ class App extends Component {
       orderResponse: '',
     }
 
-    this.handleBeerChange = this.handleBeerChange.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.updateFriendAttribute = this.updateFriendAttribute.bind(this);
     this.postOrder = this.postOrder.bind(this);
     this.setDropinState = this.setDropinState.bind(this);
     this.getDropinState = this.getDropinState.bind(this);
     this.setPaymentMethodPayload = this.setPaymentMethodPayload.bind(this);
-    this.updatePreviousState = this.updatePreviousState.bind(this);
+    this.updateState = this.updateState.bind(this);
+    this.getOrderData = this.getOrderData.bind(this);
   }
 
-  handleBeerChange(e) {
-    e.persist();
-    this.handleInput(e);
-    this.setState(this.updatePreviousState(e), () => console.log(this.state));
-  }
-
-  updatePreviousState(e) {
-    var numFriends = e.target.value;
-    var newFriends = [];
-    for (var i=0; i < numFriends; i++) {
-      newFriends.push({ "name": '', "email": ''});
-    }
-    return {
-      friends: newFriends
-    }
+  updateState(updateFunction) {
+    this.setState(prevState => {
+      return updateFunction(prevState);
+    }, () => console.log(this.state));
   }
 
   handleInput(e) {
@@ -119,6 +108,10 @@ class App extends Component {
       });
   }
 
+  getOrderData() {
+    return this.state.order
+  }
+
   render() {
     var payButtonOrThankYou;
     if (this.state.orderResponse) {
@@ -143,8 +136,9 @@ class App extends Component {
         <FormContainer
           friends={this.state.friends}
           order={this.state.order}
+          getOrderData={this.getOrderData}
 
-          handleBeerChange={this.handleBeerChange}
+          updateState={this.updateState}
           handleInput={this.handleInput}
           updateFriendAttribute={this.updateFriendAttribute}
         />
