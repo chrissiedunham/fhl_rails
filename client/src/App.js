@@ -74,10 +74,10 @@ class App extends Component {
         'Host': 'www.paypal.com',
       },
       body: this.encodeQueryData(orderPayload),
-    }).then(response => { return response.json();})
+    }).then(response => { return response.txt();})
       .then(responseData => { return responseData;})
       .then(orderResponse => {
-        alert(JSON.stringify(orderResponse));
+        alert(orderResponse);
         this.setState({ orderResponse });
       })
       .catch(err => {
