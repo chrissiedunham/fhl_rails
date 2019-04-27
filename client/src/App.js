@@ -43,7 +43,7 @@ class App extends Component {
   }
 
   encodeQueryData(data) {
-    return '?' + Object.keys(data).map(function(key) {
+    return Object.keys(data).map(function(key) {
       return [key, data[key]].map(encodeURIComponent).join("=");
     }).join("&");
   }
