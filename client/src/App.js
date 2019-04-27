@@ -42,7 +42,8 @@ class App extends Component {
   }
 
   postToPayPal() {
-    alert('posting to paypal');
+    alert(process.env.REACT_APP_BUSINESS_EMAIL);
+
     // var orderPayload = {
 		// 	cmd: '_cart',
 		// 	upload: '1',
