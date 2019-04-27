@@ -20,9 +20,7 @@ class App extends Component {
     }
 
     this.postOrder = this.postOrder.bind(this);
-    this.setDropinState = this.setDropinState.bind(this);
     this.getDropinState = this.getDropinState.bind(this);
-    this.setPaymentMethodPayload = this.setPaymentMethodPayload.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getOrderData = this.getOrderData.bind(this);
   }
@@ -33,16 +31,8 @@ class App extends Component {
     }, () => console.log(this.state));
   }
 
-  setDropinState (dropinInstance) {
-    this.setState({ dropinInstance });
-  }
-
   getDropinState () {
     return this.state.dropinInstance;
-  }
-
-  setPaymentMethodPayload (paymentMethodPayload) {
-    this.setState({ paymentMethodPayload });
   }
 
   postOrder() {
@@ -86,9 +76,8 @@ class App extends Component {
           handleFormSubmit={this.postOrder}
           paymentMethodForm={
             <BraintreeGetPaymentMethodForm
-              setDropinState={this.setDropinState}
-              setPaymentMethodPayload={this.setPaymentMethodPayload}
               getDropinState={this.getDropinState}
+              updateState={this.updateState}
             />
           }
         />
@@ -101,7 +90,6 @@ class App extends Component {
           friends={this.state.friends}
           order={this.state.order}
           getOrderData={this.getOrderData}
-
           updateState={this.updateState}
         />
         { payButtonOrThankYou }
