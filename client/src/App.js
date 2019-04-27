@@ -22,7 +22,6 @@ class App extends Component {
 
     this.encodeQueryData = this.encodeQueryData.bind(this);
     this.postOrder = this.postOrder.bind(this);
-    this.postToPayPal = this.postToPayPal.bind(this);
     this.getDropinState = this.getDropinState.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getOrderData = this.getOrderData.bind(this);
@@ -40,49 +39,6 @@ class App extends Component {
 
   getOrderData() {
     return this.state.order
-  }
-
-  encodeQueryData(data) {
-    return Object.keys(data).map(function(key) {
-      return [key, data[key]].map(encodeURIComponent).join("=");
-    }).join("&");
-  }
-
-  postToPayPal() {
-
-    var email = process.env.REACT_APP_BUSINESS_EMAIL;
-    var orderPayload = {
-			cmd: '_cart',
-			upload: '1',
-			business: email,
-			currency_code: 'USD',
-			item_name_1: 'fhl_ticket',
-			amount_1: 25.01,
-			item_name_2: 'fhl_raffle_ticket',
-			amount_2: 40.01,
-			item_name_3: 'fhl_beer',
-			amount_3: 13.01
-    };
-
-    fetch('https://www.paypal.com/cgi-bin/webscr', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Accept': 'application/html,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Origin': '',
-        'Host': 'www.paypal.com',
-      },
-      body: this.encodeQueryData(orderPayload),
-    }).then(response => { return response.txt();})
-      .then(responseData => { return responseData;})
-      .then(orderResponse => {
-        alert(orderResponse);
-        this.setState({ orderResponse });
-      })
-      .catch(err => {
-        alert("fetch error" + err);
-      });
   }
 
   postOrder() {
@@ -127,10 +83,6 @@ class App extends Component {
           }
         />
     }
-
-    payButtonOrThankYou = <PayPalButton
-      action={this.postToPayPal}
-      />
 
     return (
 			<div className="col-md-6">
