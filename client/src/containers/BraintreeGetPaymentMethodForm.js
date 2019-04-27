@@ -39,8 +39,6 @@ class BraintreeGetPaymentMethodForm extends Component {
       this.props.updateState(function(prevState) {
         return { dropinInstance };
       })
-      console.log("drop in instance in braintree");
-      console.log(this.props.dropinInstance);
     }).catch(err => console.error(err));
   }
 
@@ -50,7 +48,6 @@ class BraintreeGetPaymentMethodForm extends Component {
     this.props.getDropinState()
       .requestPaymentMethod()
       .then(paymentMethodPayload => {
-        console.log(paymentMethodPayload);
         this.props.updateState(function(prevState) {
           return { paymentMethodPayload };
         })
