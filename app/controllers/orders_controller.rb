@@ -40,8 +40,6 @@ class OrdersController < ApiController
         )
 
         Rails.logger.info(result)
-
-        render json: @order
       end
       render json: @order
     else
