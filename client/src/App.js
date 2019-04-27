@@ -35,6 +35,10 @@ class App extends Component {
     return this.state.dropinInstance;
   }
 
+  getOrderData() {
+    return this.state.order
+  }
+
   postOrder() {
     var orderPayload = {
       tickets: this.state.order.tickets,
@@ -43,7 +47,6 @@ class App extends Component {
       beers: this.state.friends,
       payment_method_nonce: this.state.paymentMethodPayload["nonce"],
     };
-    console.log(orderPayload);
     fetch('/api/orders', {
       method: 'POST',
       headers: {
@@ -60,10 +63,6 @@ class App extends Component {
       .catch(err => {
         alert("fetch error" + err);
       });
-  }
-
-  getOrderData() {
-    return this.state.order
   }
 
   render() {
