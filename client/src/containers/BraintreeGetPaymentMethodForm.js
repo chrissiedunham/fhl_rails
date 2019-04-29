@@ -3,14 +3,13 @@ import braintree from 'braintree-web-drop-in';
 import Button from '../components/Button';
 
 class BraintreeGetPaymentMethodForm extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.initBraintreePaymentForm = this.initBraintreePaymentForm.bind(this);
     this.doRequestPaymentMethod = this.doRequestPaymentMethod.bind(this);
   }
 
-  /* This life cycle hook gets executed when the component mounts */
   componentDidMount() {
     this.initBraintreePaymentForm();
   }

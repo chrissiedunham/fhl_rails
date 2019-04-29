@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import Button from '../components/Button';
 
 class PayButton extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const paymentMethod = this.props.paymentMethodPayload["nonce"];
     if (paymentMethod) {

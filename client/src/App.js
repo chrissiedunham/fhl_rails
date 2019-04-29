@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import FormContainer from './containers/FormContainer';
 import PayButton from './components/PayButton';
-import PayPalButton from './components/PayPalButton';
 import BraintreeGetPaymentMethodForm from './containers/BraintreeGetPaymentMethodForm';
 
 class App extends Component {
