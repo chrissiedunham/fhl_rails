@@ -19,7 +19,7 @@ class PayPalButton extends Component {
     var orderPayload = {
 			cmd: '_cart',
 			upload: '1',
-			business: this.props.email,
+			business: email,
 			currency_code: 'USD',
 			item_name_1: 'fhl_ticket',
 			amount_1: 25.01,
