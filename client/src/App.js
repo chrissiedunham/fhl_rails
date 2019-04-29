@@ -20,7 +20,6 @@ class App extends Component {
       orderResponse: '',
     }
 
-    this.encodeQueryData = this.encodeQueryData.bind(this);
     this.postOrder = this.postOrder.bind(this);
     this.getDropinState = this.getDropinState.bind(this);
     this.updateState = this.updateState.bind(this);

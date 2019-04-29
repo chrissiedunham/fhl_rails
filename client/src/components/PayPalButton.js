@@ -6,6 +6,7 @@ class PayPalButton extends Component {
     super(props);
 
     this.postToPayPal = this.postToPayPal.bind(this);
+    this.encodeQueryData = this.encodeQueryData.bind(this);
   }
 
   encodeQueryData(data) {
@@ -13,7 +14,6 @@ class PayPalButton extends Component {
       return [key, data[key]].map(encodeURIComponent).join("=");
     }).join("&");
   }
-
 
   postToPayPal() {
     var email = process.env.REACT_APP_BUSINESS_EMAIL;
