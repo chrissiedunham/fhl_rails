@@ -14,7 +14,7 @@ class PayButton extends Component {
       raffle_tickets: this.props.raffle_tickets,
       email: this.props.email,
       beers: this.props.friends,
-      payment_method_nonce: this.props.paymentMethodPayload["nonce"],
+      payment_method_nonce: this.props.paymentMethodNonce,
     };
     fetch('/api/orders', {
       method: 'POST',
@@ -27,7 +27,9 @@ class PayButton extends Component {
       .then(responseData => { return responseData;})
       .then(orderResponse => {
         alert(JSON.stringify(orderResponse));
-        this.setState({ orderResponse });
+        this.props.updateState(prevState => {
+          return { orderResponse };
+        })
       })
       .catch(err => {
         alert("fetch error" + err);
@@ -35,22 +37,17 @@ class PayButton extends Component {
   }
 
   render() {
-    const paymentMethod = this.props.paymentMethodPayload["nonce"];
-    if (paymentMethod) {
-      return <div>
-        <p>Thanks, we've verified and stored your payment info! { paymentMethod }</p>
-          <Button
-            action={this.postOrder}
-            style={buttonStyle}
+    return <div>
+      <p>Thanks, we've verified and stored your payment info! { this.props.paymentMethodNonce }</p>
+      <Button
+        action={this.postOrder}
+        style={buttonStyle}
 
-            id={"submit-button"}
-            type={"primary"}
-            title={"Pay with saved credit card"}
-          />
-        </div>
-    } else {
-      return this.props.paymentMethodForm
-    }
+        id={"submit-button"}
+        type={"primary"}
+        title={"Pay with saved credit card"}
+      />
+    </div>
   }
 }
 

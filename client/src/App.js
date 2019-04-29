@@ -19,6 +19,7 @@ class App extends Component {
       orderResponse: '',
     }
 
+    this.paymentButtonOrThankYou = this.paymentButtonOrThankYou.bind(this);
     this.getDropinState = this.getDropinState.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getOrderData = this.getOrderData.bind(this);
@@ -38,27 +39,28 @@ class App extends Component {
     return this.state.order
   }
 
-  render() {
-    var payButtonOrThankYou;
+  paymentButtonOrThankYou() {
     if (this.state.orderResponse) {
-      payButtonOrThankYou = <h2>Thanks for your order!</h2>;
+      return <h2>Thanks for your order!</h2>;
+    } else if (this.state.paymentMethodPayload["nonce"]) {
+      return <PayButton
+        tickets={this.state.order.tickets}
+        raffle_tickets={this.state.order.raffle_tickets}
+        email={this.state.order.email}
+        friends={this.state.friends}
+        paymentMethodNonce={this.state.paymentMethodPayload["nonce"]}
+
+        updateState={this.updateState}
+      />
     } else {
-      payButtonOrThankYou = <PayButton
-          tickets={this.state.order.tickets}
-          raffle_tickets={this.state.order.raffle_tickets}
-          email={this.state.order.email}
-          friends={this.state.friends}
-          paymentMethodPayload={this.state.paymentMethodPayload}
-
-          paymentMethodForm={
-            <BraintreeGetPaymentMethodForm
-              getDropinState={this.getDropinState}
-              updateState={this.updateState}
-            />
-          }
-        />
+      return <BraintreeGetPaymentMethodForm
+        getDropinState={this.getDropinState}
+        updateState={this.updateState}
+      />
     }
+  }
 
+  render() {
     return (
 			<div className="col-md-6">
         <h1>Faith, Hops, Love</h1>
@@ -68,7 +70,7 @@ class App extends Component {
           getOrderData={this.getOrderData}
           updateState={this.updateState}
         />
-        { payButtonOrThankYou }
+        { this.paymentButtonOrThankYou() }
 			</div>
     );
   }
