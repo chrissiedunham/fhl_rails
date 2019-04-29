@@ -19,7 +19,6 @@ class App extends Component {
       orderResponse: '',
     }
 
-    this.postOrder = this.postOrder.bind(this);
     this.getDropinState = this.getDropinState.bind(this);
     this.updateState = this.updateState.bind(this);
     this.getOrderData = this.getOrderData.bind(this);
@@ -39,40 +38,18 @@ class App extends Component {
     return this.state.order
   }
 
-  postOrder() {
-    var orderPayload = {
-      tickets: this.state.order.tickets,
-      raffle_tickets: this.state.order.raffle_tickets,
-      email: "test_new_email@gmail.com",
-      beers: this.state.friends,
-      payment_method_nonce: this.state.paymentMethodPayload["nonce"],
-    };
-    fetch('/api/orders', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ order: orderPayload })
-    }).then(response => { return response.json();})
-      .then(responseData => { return responseData;})
-      .then(orderResponse => {
-        alert(JSON.stringify(orderResponse));
-        this.setState({ orderResponse });
-      })
-      .catch(err => {
-        alert("fetch error" + err);
-      });
-  }
-
   render() {
     var payButtonOrThankYou;
     if (this.state.orderResponse) {
       payButtonOrThankYou = <h2>Thanks for your order!</h2>;
     } else {
       payButtonOrThankYou = <PayButton
+          tickets={this.state.order.tickets}
+          raffle_tickets={this.state.order.raffle_tickets}
+          email={this.state.order.email}
+          friends={this.state.friends}
           paymentMethodPayload={this.state.paymentMethodPayload}
-          handleFormSubmit={this.postOrder}
+
           paymentMethodForm={
             <BraintreeGetPaymentMethodForm
               getDropinState={this.getDropinState}
