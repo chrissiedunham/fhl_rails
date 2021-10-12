@@ -9,7 +9,7 @@ gem 'rails', '~> 5.2.2'
 gem 'devise'
 gem 'activeadmin'
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 4.3'
 gem "braintree", "~> 2.95.0"
 gem 'dotenv', '~> 2.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
